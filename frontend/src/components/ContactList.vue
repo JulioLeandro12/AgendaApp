@@ -15,7 +15,7 @@
       <Column header="Ações">
         <template #body="slotProps">
           <Button icon="pi pi-pencil" class="p-button-text p-button-rounded p-button-warning" @click="editContact(slotProps.data)" />
-          <Button icon="pi pi-trash" class="p-button-text p-button-rounded p-button-danger" @click="deleteContact(slotProps.data)" />
+          <Button icon="pi pi-trash" class="p-button-text p-button-rounded p-button-danger" @click="confirmDeleteContact(slotProps.data)" />
         </template>
       </Column>
     </DataTable>
@@ -38,7 +38,7 @@
 
       <template #footer>
         <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
-        <Button label="Salvar" icon="pi pi-check" class="p-button-text" @click="saveContact" />
+        <Button :disabled="saving" :loading="saving" label="Salvar" icon="pi pi-check" class="p-button-text" @click="saveContact" />
       </template>
     </Dialog>
   </div>
@@ -55,12 +55,13 @@ import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
-import axios from 'axios'
+import { getContacts as fetchContacts, createContact, updateContact, deleteContact as apiDeleteContact } from '../api/api'
 
 // Estados
 const contacts = ref([])
 const contactDialog = ref(false)
 const contact = ref({ id: null, name: '', email: '', phone: '' })
+const saving = ref(false)
 
 const toast = useToast()
 const confirm = useConfirm()
@@ -76,23 +77,26 @@ const hideDialog = () => {
 }
 
 const loadContacts = async () => {
-  const res = await axios.get('http://localhost:5000/api/contacts')
-  contacts.value = res.data
+  contacts.value = await fetchContacts()
 }
 
 const saveContact = async () => {
+  saving.value = true
   try {
     if (contact.value.id) {
-      await axios.put(`http://localhost:5000/api/contacts/${contact.value.id}`, contact.value)
+      await updateContact(contact.value.id, contact.value)
       toast.add({ severity: 'success', summary: 'Atualizado!', detail: 'Contato atualizado com sucesso.', life: 3000 })
     } else {
-      await axios.post('http://localhost:5000/api/contacts', contact.value)
+      await createContact(contact.value)
       toast.add({ severity: 'success', summary: 'Adicionado!', detail: 'Contato adicionado com sucesso.', life: 3000 })
     }
     contactDialog.value = false
     await loadContacts()
   } catch (err) {
-    toast.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao salvar contato.', life: 3000 })
+    const msgs = err.normalizedMessages || ['Falha ao salvar contato.']
+    msgs.forEach(m => toast.add({ severity: 'error', summary: 'Erro', detail: m, life: 4000 }))
+  } finally {
+    saving.value = false
   }
 }
 
@@ -101,13 +105,13 @@ const editContact = (data) => {
   contactDialog.value = true
 }
 
-const deleteContact = (data) => {
+const confirmDeleteContact = (data) => {
   confirm.require({
     message: `Deseja excluir o contato "${data.name}"?`,
     header: 'Confirmação',
     icon: 'pi pi-exclamation-triangle',
     accept: async () => {
-      await axios.delete(`http://localhost:5000/api/contacts/${data.id}`)
+      await apiDeleteContact(data.id)
       toast.add({ severity: 'info', summary: 'Excluído', detail: 'Contato removido.', life: 3000 })
       await loadContacts()
     }

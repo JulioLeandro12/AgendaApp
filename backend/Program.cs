@@ -1,3 +1,162 @@
+// using Microsoft.EntityFrameworkCore;
+// using ContactApi.Data;
+// using System.Text.Json.Serialization;
+
+// var builder = WebApplication.CreateBuilder(args);
+
+// // Configuration for PostgreSQL
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+//                      ?? Environment.GetEnvironmentVariable("CONNECTION_STRING")
+//                      ?? "Host=postgres;Port=5432;Database=contactsdb;Username=postgres;Password=postgres";
+
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseNpgsql(connectionString)
+// );
+
+// builder.Services.AddControllers()
+//     .AddJsonOptions(opts => {
+//         opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+//     });
+
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
+
+// // MVC views are not required for API but kept if needed
+// builder.Services.AddControllersWithViews();
+
+// var app = builder.Build();
+
+// // Apply migrations & seed database on startup (inside container, will run automatically)
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//     db.Database.Migrate();
+//     SeedData.Initialize(db);
+// }
+
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseDeveloperExceptionPage();
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+// app.UseHttpsRedirection();
+
+// app.UseRouting();
+// app.UseAuthorization();
+
+// app.MapControllers();
+
+// app.Run();
+
+
+// --------------------------------------------------------------
+
+// using Microsoft.EntityFrameworkCore;
+// using ContactApi.Data;
+// using System.Text.Json.Serialization;
+// using Microsoft.AspNetCore.Diagnostics;
+// using Microsoft.AspNetCore.Http;
+// using Microsoft.Extensions.Logging;
+
+// using Microsoft.EntityFrameworkCore;
+// using ContactApi.Data;
+// using ContactApi.Repositories;
+// using ContactApi.Services;
+// using FluentValidation.AspNetCore;
+// using System.Text.Json.Serialization;
+// using AutoMapper;
+// using Microsoft.OpenApi.Models;
+
+// var builder = WebApplication.CreateBuilder(args);
+
+// // Configuration for PostgreSQL
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+//                      ?? Environment.GetEnvironmentVariable("CONNECTION_STRING")
+//                      ?? "Host=postgres;Port=5432;Database=contactsdb;Username=postgres;Password=postgres";
+
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseNpgsql(connectionString)
+// );
+
+// builder.Services.AddControllers()
+//     .AddJsonOptions(opts =>
+//     {
+//         opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+//     });
+//     .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<ContactApi.Validators.ContactValidator>());
+
+// builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// builder.Services.AddScoped<IContactRepository, ContactRepository>();
+// builder.Services.AddScoped<IContactService, ContactService>();
+
+// builder.Services.AddEndpointsApiExplorer();
+// // builder.Services.AddSwaggerGen();
+// builder.Services.AddSwaggerGen(c => {
+//     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Agenda", Version = "v1" });
+// });
+// // builder.Services.AddControllersWithViews(); // MVC views are not required for API but kept if needed
+
+// var app = builder.Build();
+
+// // Apply migrations & seed database on startup (inside container, will run automatically)
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//     db.Database.Migrate();
+//     SeedData.Initialize(db);
+// }
+
+// // Development: developer page + swagger
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseDeveloperExceptionPage();
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+// else
+// {
+//     // in production, use the exception handler global (hypothetical scenario)
+//     app.UseExceptionHandler("/error");
+// }
+
+// // global exception endpoint for production
+// app.Map("/error", (HttpContext http) =>
+// {
+//     // capture exception
+//     var feature = http.Features.Get<IExceptionHandlerFeature>();
+//     var exception = feature?.Error;
+
+//     // log the exception
+//     var logger = http.RequestServices.GetRequiredService<ILogger<Program>>();
+//     if (exception != null)
+//     {
+//         logger.LogError(exception, "Unhandled exception captured by UseExceptionHandler");
+//     }
+
+//     // in developer environments
+//     var detail = app.Environment.IsDevelopment() ? exception?.ToString() : "Um erro ocorreu no servidor.";
+
+//     return Results.Problem(
+//         title: "Erro interno no servidor",
+//         detail: detail,
+//         statusCode: 500
+//     );
+// });
+
+// app.UseHttpsRedirection();
+
+// app.UseRouting();
+
+// app.UseAuthorization();
+
+// app.MapControllers();
+
+// app.Run();
+
+// --------------------------------------------------------------
+
 using Microsoft.EntityFrameworkCore;
 using ContactApi.Data;
 using ContactApi.Repositories;
@@ -8,8 +167,6 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +188,7 @@ builder.Services
     });
 
 // FluentValidation
-builder.Services.AddFluentValidationAutoValidation()
-                .AddFluentValidationClientsideAdapters();
+builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<ContactApi.Validators.ContactDtoValidator>();
 
 // Customize API behavior to suppress automatic model state validation (only use the FluentValidation)
@@ -41,9 +197,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
-// AutoMapper removido: mapeamento agora é manual dentro de ContactService.
-
-
+// AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // dependency Injection (Repository + Service)
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
@@ -61,17 +216,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// // Customize API behavior to suppress automatic model state validation (only use the FluentValidation)
+// builder.Services.Configure<ApiBehaviorOptions>(options =>
+// {
+//     options.SuppressModelStateInvalidFilter = true;
+// });
 
-// add CORS support
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:5174") // doors open to frontend dev servers
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
 
 var app = builder.Build();
 
@@ -118,7 +268,6 @@ app.Map("/error", (HttpContext http) =>
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors("AllowFrontend"); // Enable CORS
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -6,22 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace ContactApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class ContactController : ControllerBase
+    [Route("api/contacts")] // padroniza rota em minúsculo e plural
+    public class ContactsController : ControllerBase
     {
         private readonly IContactService _service;
 
-        public ContactController(IContactService service)
+        public ContactsController(IContactService service)
         {
             _service = service;
         }
 
-        // GET: api/Contacts -> Get all contacts
+    // GET: api/contacts -> Get all contacts
         [HttpGet]
         public async Task<IActionResult> GetAll() =>
             Ok(await _service.GetAllAsync());
 
-        // GET: api/Contacts/{id} -> Get a specific contact by ID
+    // GET: api/contacts/{id} -> Get a specific contact by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -29,7 +29,7 @@ namespace ContactApi.Controllers
             return contact == null ? NotFound() : Ok(contact);
         }
 
-        // POST: api/Contacts -> Create a new contact
+    // POST: api/contacts -> Create a new contact
         [HttpPost]
         public async Task<IActionResult> Create(ContactDto dto)
         {
@@ -44,7 +44,7 @@ namespace ContactApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        // PUT: api/Contacts/{id} -> Update an existing contact
+    // PUT: api/contacts/{id} -> Update an existing contact
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, ContactDto dto)
         {
@@ -57,7 +57,7 @@ namespace ContactApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Contacts/{id} -> Delete a contact
+    // DELETE: api/contacts/{id} -> Delete a contact
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
