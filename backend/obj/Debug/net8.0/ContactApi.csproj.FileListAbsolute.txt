@@ -5,6 +5,11 @@ C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\ContactApi.deps.json
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\ContactApi.runtimeconfig.json
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\ContactApi.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\ContactApi.pdb
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Humanizer.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -17,6 +22,10 @@ C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.EntityFram
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Users\anime\Documents\AgendaApp\backend\bin\Debug\net8.0\Npgsql.dll
@@ -89,6 +98,7 @@ C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\ContactApi.AssemblyI
 C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\ContactApi.csproj.CoreCompileInputs.cache
 C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\ContactApi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\ContactApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\ContactApi.sourcelink.json
 C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\anime\Documents\AgendaApp\backend\obj\Debug\net8.0\staticwebassets\msbuild.ContactApi.Microsoft.AspNetCore.StaticWebAssets.props
