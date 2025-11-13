@@ -68,7 +68,8 @@ const confirm = useConfirm()
 
 // Funções principais
 const openNew = () => {
-  contact.value = { id: null, name: '', email: '', phone: '' }
+  // Não incluir id para evitar envio de id:null (quebra binding int no backend)
+  contact.value = { name: '', email: '', phone: '' }
   contactDialog.value = true
 }
 
@@ -87,7 +88,10 @@ const saveContact = async () => {
       await updateContact(contact.value.id, contact.value)
       toast.add({ severity: 'success', summary: 'Atualizado!', detail: 'Contato atualizado com sucesso.', life: 3000 })
     } else {
-      await createContact(contact.value)
+      // Remove id caso algum estado residual tenha, evitando id:null no payload
+      const newPayload = { ...contact.value }
+      delete newPayload.id
+      await createContact(newPayload)
       toast.add({ severity: 'success', summary: 'Adicionado!', detail: 'Contato adicionado com sucesso.', life: 3000 })
     }
     contactDialog.value = false
