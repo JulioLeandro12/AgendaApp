@@ -1,4 +1,3 @@
-using AutoMapper;
 using ContactApi.DTOs;
 using ContactApi.Models;
 using ContactApi.Repositories;
@@ -8,24 +7,22 @@ namespace ContactApi.Services
     public class ContactService : IContactService
     {
         private readonly IContactRepository _repository;
-        private readonly IMapper _mapper;
 
-        public ContactService(IContactRepository repository, IMapper mapper)
+        public ContactService(IContactRepository repository)
         {
             _repository = repository;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ContactDto>> GetAllAsync()
         {
             var contacts = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<ContactDto>>(contacts);
+            return contacts.Select(ToDto);
         }
 
         public async Task<ContactDto?> GetByIdAsync(int id)
         {
             var contact = await _repository.GetByIdAsync(id);
-            return _mapper.Map<ContactDto?>(contact);
+            return contact == null ? null : ToDto(contact);
         }
 
         public async Task<ContactDto> CreateAsync(ContactDto dto)
@@ -33,9 +30,9 @@ namespace ContactApi.Services
             if (await _repository.ExistsByEmailAsync(dto.Email))
                 throw new InvalidOperationException("Já existe um contato com esse e-mail.");
 
-            var contact = _mapper.Map<Contact>(dto);
+            var contact = FromDto(dto);
             var created = await _repository.AddAsync(contact);
-            return _mapper.Map<ContactDto>(created);
+            return ToDto(created);
         }
 
         public async Task UpdateAsync(ContactDto dto)
@@ -44,7 +41,10 @@ namespace ContactApi.Services
             if (existing == null)
                 throw new KeyNotFoundException("Contato não encontrado.");
 
-            _mapper.Map(dto, existing);
+            // update properties manually
+            existing.Name = dto.Name;
+            existing.Email = dto.Email;
+            existing.Phone = dto.Phone;
             await _repository.UpdateAsync(existing);
         }
 
@@ -52,5 +52,22 @@ namespace ContactApi.Services
         {
             await _repository.DeleteAsync(id);
         }
+
+        // Mapping helpers (private)
+        private static ContactDto ToDto(Contact c) => new()
+        {
+            Id = c.Id,
+            Name = c.Name,
+            Email = c.Email,
+            Phone = c.Phone
+        };
+
+        private static Contact FromDto(ContactDto dto) => new()
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Email = dto.Email,
+            Phone = dto.Phone
+        };
     }
 }

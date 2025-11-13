@@ -1,28 +1,46 @@
+// import { createApp } from 'vue'
+// import App from './App.vue'
+// import router from './router'
+
+// import PrimeVue from 'primevue/config'
+// import ToastService from 'primevue/toastservice'
+// import ConfirmationService from 'primevue/confirmationservice'
+
+// import 'primevue/resources/themes/lara-light-blue/theme.css'    // theme
+// import 'primevue/resources/primevue.min.css'                   // core css
+// import 'primeicons/primeicons.css'                            // icons
+// import 'primeflex/primeflex.css'
+
+// const app = createApp(App)
+
+// app.use(router)
+// app.use(PrimeVue)
+// app.use(ToastService)
+// app.use(ConfirmationService)
+
+// app.mount('#app')
+
+
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
 
-import 'primevue/resources/themes/saga-blue/theme.css'      // theme
-import 'primevue/resources/primevue.min.css'                // core css
-import 'primeicons/primeicons.css'                          // icons
-
+// PrimeVue e CSS
 import PrimeVue from 'primevue/config'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import Dialog from 'primevue/dialog'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import ConfirmDialog from 'primevue/confirmdialog'
-import ToastService from 'primevue/toastservice'
+import 'primevue/resources/themes/lara-light-blue/theme.css'
+import 'primevue/resources/primevue.min.css'
+import 'primeicons/primeicons.css'
 
+// Serviços adicionais do PrimeVue
+import ToastService from 'primevue/toastservice'
+import ConfirmationService from 'primevue/confirmationservice'
+
+// Criação da instância do app
 const app = createApp(App)
+
+app.use(router)
 app.use(PrimeVue)
 app.use(ToastService)
-
-app.component('Button', Button)
-app.component('InputText', InputText)
-app.component('Dialog', Dialog)
-app.component('DataTable', DataTable)
-app.component('Column', Column)
-app.component('ConfirmDialog', ConfirmDialog)
+app.use(ConfirmationService)
 
 app.mount('#app')

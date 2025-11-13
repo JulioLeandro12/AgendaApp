@@ -5,10 +5,11 @@ using ContactApi.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Text.Json.Serialization;
-using AutoMapper;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,8 +41,9 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
-// AutoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+// AutoMapper removido: mapeamento agora é manual dentro de ContactService.
+
+
 
 // dependency Injection (Repository + Service)
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
@@ -49,10 +51,27 @@ builder.Services.AddScoped<IContactService, ContactService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(
-    c => {c.SwaggerDoc("v1", new OpenApiInfo {Title = "Agenda API", Version = "v1",Description = "API de agenda para gerenciamento de contatos"});
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Agenda API",
+        Version = "v1",
+        Description = "API de agenda para gerenciamento de contatos"
+    });
 });
 
+
+// add CORS support
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5174") // doors open to frontend dev servers
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -99,6 +118,7 @@ app.Map("/error", (HttpContext http) =>
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("AllowFrontend"); // Enable CORS
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

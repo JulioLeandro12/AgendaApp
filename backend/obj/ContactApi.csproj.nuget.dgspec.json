@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj": {}
+    "c:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj": {
+    "c:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj",
+        "projectUniqueName": "c:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj",
         "projectName": "ContactApi",
-        "projectPath": "C:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj",
+        "projectPath": "c:\\Users\\anime\\Documents\\AgendaApp\\backend\\ContactApi.csproj",
         "packagesPath": "C:\\Users\\anime\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\anime\\Documents\\AgendaApp\\backend\\obj\\",
+        "outputPath": "c:\\Users\\anime\\Documents\\AgendaApp\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\anime\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,14 +43,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "AutoMapper": {
-              "target": "Package",
-              "version": "[15.1.0, )"
-            },
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[12.0.1, )"
-            },
             "FluentValidation.AspNetCore": {
               "target": "Package",
               "version": "[11.3.1, )"
@@ -97,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.415/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.416/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
