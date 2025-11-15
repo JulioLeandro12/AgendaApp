@@ -9,6 +9,7 @@ namespace ContactApi.Repositories
         Task<Contact> AddAsync(Contact contact);
         Task UpdateAsync(Contact contact);
         Task DeleteAsync(int id);
-        Task<bool> ExistsByEmailAsync(string email);
+        Task<bool> ExistsByEmailAsync(string email, int? excludeId = null);
+        Task<bool> ExistsByNameAsync(string name, int? excludeId = null);
     }
 }

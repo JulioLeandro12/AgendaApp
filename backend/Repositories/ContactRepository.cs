@@ -46,9 +46,22 @@ namespace ContactApi.Repositories
             }
         }
 
-        public async Task<bool> ExistsByEmailAsync(string email)
+        public async Task<bool> ExistsByEmailAsync(string email, int? excludeId = null)
         {
+            if (excludeId.HasValue)
+            {
+                return await _context.Contacts.AnyAsync(c => c.Email == email && c.Id != excludeId.Value);
+            }
             return await _context.Contacts.AnyAsync(c => c.Email == email);
+        }
+
+        public async Task<bool> ExistsByNameAsync(string name, int? excludeId = null)
+        {
+            if (excludeId.HasValue)
+            {
+                return await _context.Contacts.AnyAsync(c => c.Name == name && c.Id != excludeId.Value);
+            }
+            return await _context.Contacts.AnyAsync(c => c.Name == name);
         }
     }
 }

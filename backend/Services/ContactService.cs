@@ -7,7 +7,7 @@ namespace ContactApi.Services
     public class ContactService : IContactService
     {
         private readonly IContactRepository _repository;
-
+        
         public ContactService(IContactRepository repository)
         {
             _repository = repository;
@@ -27,10 +27,14 @@ namespace ContactApi.Services
 
         public async Task<ContactDto> CreateAsync(ContactDto dto)
         {
+            if (await _repository.ExistsByNameAsync(dto.Name))
+                throw new InvalidOperationException("Nome do contato já existe.");
             if (await _repository.ExistsByEmailAsync(dto.Email))
-                throw new InvalidOperationException("Já existe um contato com esse e-mail.");
+                throw new InvalidOperationException("Este email já existe.");
 
             var contact = FromDto(dto);
+            // Ensure Id is not set on create
+            contact.Id = 0;
             var created = await _repository.AddAsync(contact);
             return ToDto(created);
         }
@@ -41,7 +45,18 @@ namespace ContactApi.Services
             if (existing == null)
                 throw new KeyNotFoundException("Contato não encontrado.");
 
-            // update properties manually
+            if (!string.Equals(existing.Name, dto.Name, StringComparison.Ordinal))
+            {
+                if (await _repository.ExistsByNameAsync(dto.Name, dto.Id))
+                    throw new InvalidOperationException("Nome do contato já existe.");
+            }
+
+            if (!string.Equals(existing.Email, dto.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                if (await _repository.ExistsByEmailAsync(dto.Email, dto.Id))
+                    throw new InvalidOperationException("Este email já existe.");
+            }
+
             existing.Name = dto.Name;
             existing.Email = dto.Email;
             existing.Phone = dto.Phone;
@@ -53,21 +68,26 @@ namespace ContactApi.Services
             await _repository.DeleteAsync(id);
         }
 
-        // Mapping helpers (private)
-        private static ContactDto ToDto(Contact c) => new()
+        private static ContactDto ToDto(Contact contact)
         {
-            Id = c.Id,
-            Name = c.Name,
-            Email = c.Email,
-            Phone = c.Phone
-        };
+            return new ContactDto
+            {
+                Id = contact.Id,
+                Name = contact.Name,
+                Email = contact.Email,
+                Phone = contact.Phone
+            };
+        }
 
-        private static Contact FromDto(ContactDto dto) => new()
+        private static Contact FromDto(ContactDto dto)
         {
-            Id = dto.Id,
-            Name = dto.Name,
-            Email = dto.Email,
-            Phone = dto.Phone
-        };
+            return new Contact
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Email = dto.Email,
+                Phone = dto.Phone
+            };
+        }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ContactApi.Controllers
 {
     [ApiController]
-    [Route("api/contacts")] // padroniza rota em minúsculo e plural
+    [Route("api/contacts")]
     public class ContactsController : ControllerBase
     {
         private readonly IContactService _service;
@@ -16,12 +16,12 @@ namespace ContactApi.Controllers
             _service = service;
         }
 
-    // GET: api/contacts -> Get all contacts
+        // GET: api/Contacts -> Get all contacts
         [HttpGet]
         public async Task<IActionResult> GetAll() =>
             Ok(await _service.GetAllAsync());
 
-    // GET: api/contacts/{id} -> Get a specific contact by ID
+        // GET: api/Contacts/{id} -> Get a specific contact by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -29,22 +29,27 @@ namespace ContactApi.Controllers
             return contact == null ? NotFound() : Ok(contact);
         }
 
-    // POST: api/contacts -> Create a new contact
+        // POST: api/Contacts -> Create a new contact
         [HttpPost]
         public async Task<IActionResult> Create(ContactDto dto)
         {
             if (!ModelState.IsValid)
             {
-                // Retorna 400 com detalhes das validações do FluentValidation
                 return ValidationProblem(ModelState);
             }
 
-
-            var created = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            try
+            {
+                var created = await _service.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ProblemDetails { Title = "Conflito", Detail = ex.Message, Status = StatusCodes.Status409Conflict });
+            }
         }
 
-    // PUT: api/contacts/{id} -> Update an existing contact
+        // PUT: api/Contacts/{id} -> Update an existing contact
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, ContactDto dto)
         {
@@ -53,11 +58,22 @@ namespace ContactApi.Controllers
             {
                 return ValidationProblem(ModelState);
             }
-            await _service.UpdateAsync(dto);
-            return NoContent();
+            try
+            {
+                await _service.UpdateAsync(dto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ProblemDetails { Title = "Conflito", Detail = ex.Message, Status = StatusCodes.Status409Conflict });
+            }
         }
 
-    // DELETE: api/contacts/{id} -> Delete a contact
+        // DELETE: api/Contacts/{id} -> Delete a contact
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

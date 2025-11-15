@@ -9,7 +9,12 @@ namespace ContactApi.Validators
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage("O nome é obrigatório.");
             RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("E-mail inválido.");
-            RuleFor(x => x.Phone).NotEmpty().Matches(@"^\d{10,11}$").WithMessage("Telefone inválido.");
+            // Accept generic E.164 format with optional spaces/hyphens: +<country><digits>
+            // Ex.: +5581986941088, +1 212 555 1234, +351 912 345 678
+            RuleFor(x => x.Phone)
+                .NotEmpty()
+                .Matches(@"^\+\d(?:[\s-]?\d){7,14}$")
+                .WithMessage("Telefone inválido. Use o formato internacional (E.164), ex.: +5581986941088.");
         }
     }
 }
