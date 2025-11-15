@@ -1,14 +1,13 @@
 <template>
-  <div class="p-4">
+  <div class="page-card">
     <Toast />
     <ConfirmDialog />
-
-    <div class="flex justify-content-between align-items-center mb-3">
+    <div class="page-header">
       <h2>Contatos</h2>
-      <Button label="Novo Contato" icon="pi pi-plus" class="p-button-success" @click="openNew" />
+      <Button label="Novo Contato" icon="pi pi-plus" class="p-button-rounded p-button-success" @click="openNew" />
     </div>
 
-    <DataTable :value="contacts" paginator :rows="5" :rowsPerPageOptions="[5]" responsiveLayout="scroll">
+    <DataTable class="datatable-wrapper" :value="contacts" paginator :rows="5" :rowsPerPageOptions="[5]" responsiveLayout="scroll">
       <Column field="name" header="Nome"></Column>
       <Column field="email" header="Email"></Column>
       <Column header="Telefone">
@@ -16,7 +15,7 @@
           {{ formatPhoneTable(slotProps.data.phone) }}
         </template>
       </Column>
-      <Column header="Ações">
+      <Column header="Ações" bodyClass="actions-column">
         <template #body="slotProps">
           <Button icon="pi pi-pencil" class="p-button-text p-button-rounded p-button-warning" @click="editContact(slotProps.data)" />
           <Button icon="pi pi-trash" class="p-button-text p-button-rounded p-button-danger" @click="confirmDeleteContact(slotProps.data)" />
@@ -24,7 +23,7 @@
       </Column>
     </DataTable>
 
-    <Dialog v-model:visible="contactDialog" header="Adicionar Contato" :modal="true" class="p-fluid">
+    <Dialog v-model:visible="contactDialog" header="Adicionar Contato" :modal="true" class="p-fluid dialog-form" :style="{ width: '420px' }">
       <div class="field">
         <label for="name">Nome</label>
         <InputText id="name" v-model="contact.name" required autofocus />
@@ -46,8 +45,10 @@
       </div>
 
       <template #footer>
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
-        <Button :disabled="saving" :loading="saving" label="Salvar" icon="pi pi-check" class="p-button-text" @click="saveContact" />
+        <div class="flex gap-2 justify-content-end w-full">
+          <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
+          <Button :disabled="saving" :loading="saving" label="Salvar" icon="pi pi-check" class="p-button-success" @click="saveContact" />
+        </div>
       </template>
     </Dialog>
   </div>
@@ -244,7 +245,6 @@ onMounted(loadContacts)
 </script>
 
 <style scoped>
-.field {
-  margin-bottom: 1rem;
-}
+.field { margin-bottom: 1rem; }
+.gap-2 { gap: .75rem; }
 </style>

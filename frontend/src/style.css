@@ -24,10 +24,13 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-bg, #f5f7fa);
+  color: var(--app-text, #213547);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 h1 {
@@ -59,10 +62,73 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
+  width: 100%;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 1.5rem 1.25rem 3rem;
+  text-align: left;
+}
+
+.page-card {
+  background: #ffffff;
+  border: 1px solid #e3e8ef;
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.page-header h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: .5px;
+  color: #1f2933;
+}
+
+.datatable-wrapper {
+  margin-top: .5rem;
+}
+
+.dialog-form .field label {
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: .35rem;
+  color: #475569;
+  display: block;
+}
+
+.dialog-form .field input,
+.dialog-form .field .p-dropdown {
+  box-shadow: 0 0 0 1px #d0d7e2;
+  border-radius: 8px;
+}
+
+.dialog-form .field input:focus-visible {
+  outline: 2px solid #646cff;
+  outline-offset: 2px;
+}
+
+.actions-column .p-button {
+  margin-right: .25rem;
+}
+
+.actions-column .p-button:last-child {
+  margin-right: 0;
+}
+
+@media (max-width: 640px) {
+  .page-card { padding: 1.25rem 1rem 1.5rem; }
+  .page-header h2 { font-size: 1.15rem; }
 }
 
 @media (prefers-color-scheme: light) {
