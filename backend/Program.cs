@@ -5,7 +5,6 @@ using ContactApi.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Text.Json.Serialization;
-using AutoMapper;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +29,7 @@ builder.Services
     });
 
 // FluentValidation
-builder.Services.AddFluentValidationAutoValidation()
-                .AddFluentValidationClientsideAdapters();
+builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<ContactApi.Validators.ContactDtoValidator>();
 
 // Customize API behavior to suppress automatic model state validation (only use the FluentValidation)
@@ -40,8 +38,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
-// AutoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // dependency Injection (Repository + Service)
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
@@ -49,8 +45,14 @@ builder.Services.AddScoped<IContactService, ContactService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(
-    c => {c.SwaggerDoc("v1", new OpenApiInfo {Title = "Agenda API", Version = "v1",Description = "API de agenda para gerenciamento de contatos"});
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Agenda API",
+        Version = "v1",
+        Description = "API de agenda para gerenciamento de contatos"
+    });
 });
 
 

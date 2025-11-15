@@ -27,7 +27,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "5173:80" # exposição do nginx static (80 do container -> 5173 local)
+      - "5174:80" # exposição do nginx static (80 do container -> 5174 local)
 
 volumes:
   pgdata:
